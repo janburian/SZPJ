@@ -1,15 +1,16 @@
 import os
 from pathlib import Path
-import re
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 def load_documents(path_to_directory: Path):
-    res = []
+    res = {}
     list_documents_names = os.listdir(path_to_directory)
 
     for document_name in list_documents_names:
         document_path = os.path.join(path_to_documents_directory, document_name)
         document = open(document_path, "r")
-        res.append(document.read())
+        res[document_name] = document.read()
         document.close()
 
     return res
@@ -59,25 +60,35 @@ def separate_query_text(DOC_end_tags_indices, DOC_start_tags_indices, queries):
 
 
 def reformat_documents(documents_raw):
-    res = []
-    for document in documents_raw:
+    res = {}
+    for document_name in documents_raw:
+        document = documents_raw[document_name]
         document_list = document.split('\n')
         document_list_pruned = []
         for element in document_list:
-            element = ' '.join(element.split())  # deleting tabs (\t)
-            if element in ['<html>', '</html>', '<pre>', '</pre>', ''] or 'CACM' in element or element.isdigit():
+            element_splitted = ''.join(element.split())  # deleting tabs (\t)
+            if element_splitted.isdigit():
+                continue
+            if element in ['<html>', '</html>', '<pre>', '</pre>', ''] or 'CACM' in element:
                 continue
             else:
                 document_list_pruned.append(element)
 
         document_str_pruned = ' '.join(document_list_pruned)
-        res.append(document_str_pruned)
+        res[document_name] = document_str_pruned
 
     return res
 
 
-def delete_numbers():
-    pass
+def vectorizer(data: list, queries: list):
+    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=False)  # specifikace objektu vectorizeru
+    sparse_doc_term_matrix = tfidf.fit_transform(data)  # samotná tvorba matice slov a dokumentů
+    dense_doc_term_matrix = sparse_doc_term_matrix.toarray()  # matice v lepsim formatu
+
+
+
+
+
 
 if __name__ == '__main__':
     path_to_documents_directory = Path("./documents")
@@ -91,4 +102,5 @@ if __name__ == '__main__':
     documents_final = reformat_documents(documents_list)
     queries_final = reformat_queries(queries_list)
 
+    # Vectorizer 
     print()
