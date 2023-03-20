@@ -1,0 +1,331 @@
+<DOC>
+<DOCNO> 1 </DOCNO>
+
+
+ What articles exist which deal with TSS (Time Sharing System), an
+operating system for IBM computers?
+
+ 
+</DOC> 
+
+
+<DOC>
+<DOCNO> 2 </DOCNO>
+
+
+ I am interested in articles written either by Prieve or Udo Pooch
+
+Prieve, B.
+Pooch, U.
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 3 </DOCNO>
+
+
+ Intermediate languages used in construction of multi-targeted compilers; TCOLL
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 4 </DOCNO>
+
+
+ I'm interested in mechanisms for communicating between disjoint processes,
+possibly, but not exclusively, in a distributed environment.  I would
+rather see descriptions of complete mechanisms, with or without implementations,
+as opposed to theoretical work on the abstract problem.  Remote procedure
+calls and message-passing are examples of my interests.
+
+
+</DOC>
+
+
+<DOC>
+<DOCNO> 5 </DOCNO>
+
+
+ I'd like papers on design and implementation of editing interfaces,
+window-managers, command interpreters, etc.  The essential issues are
+human interface design, with views on improvements to user efficiency,
+effectiveness and satisfaction.
+
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 6 </DOCNO>
+
+
+ Interested in articles on robotics, motion planning particularly the
+geometric and combinatorial aspects.  We are not interested in the
+dynamics of arm motion.
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 7 </DOCNO>
+
+
+ I am interested in distributed algorithms - concurrent programs in
+which processes communicate and synchronize by using message passing.
+Areas of particular interest include fault-tolerance and techniques
+for understanding the correctness of these algorithms.
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 8 </DOCNO>
+
+
+ Addressing schemes for resources in networks; resource addressing in
+network operating systems
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 9 </DOCNO>
+
+
+ Security considerations in local networks, network operating systems,
+and distributed systems.
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 10 </DOCNO>
+
+
+ Parallel languages; languages for parallel computation
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 11 </DOCNO>
+
+
+ SETL, Very High Level Languages
+
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 12 </DOCNO>
+
+
+ portable operating systems
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 13 </DOCNO>
+
+
+ code optimization for space efficiency
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 14 </DOCNO>
+
+
+ find all discussions of optimal implementations of sort algorithms for
+database management applications
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 15 </DOCNO>
+
+
+ Find all discussions of horizontal microcode optimization with special
+emphasis on optimization of loops and global optimization.
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 16 </DOCNO>
+
+
+ find all descriptions of file handling in operating systems based on
+multiple processes and message passing.
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 17 </DOCNO>
+
+
+ Optimization of intermediate and machine code
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 18 </DOCNO>
+
+
+ Languages and compilers for parallel processors, especially highly
+horizontal microcoded machines; code compaction
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 19 </DOCNO>
+
+
+ Parallel algorithms
+
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 20 </DOCNO>
+
+
+ Graph theoretic algorithms applicable to sparse matrices
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 21 </DOCNO>
+
+
+ computational complexity, intractability, class-complete reductions,
+algorithms and efficiency
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 22 </DOCNO>
+
+
+ I am interested in hidden-line and hidden-surface algorithms for
+cylinders, toroids, spheres, and cones.  This is a rather specialized
+topic in computer graphics.
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 23 </DOCNO>
+
+
+ Distributed computing structures and algorithms
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 24 </DOCNO>
+
+
+ Applied stochastic processes
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 25 </DOCNO>
+
+
+ Performance evaluation and modelling of computer systems
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 26 </DOCNO>
+
+
+ Concurrency control mechanisms in operating systems
+
+  
+</DOC>
+
+
+<DOC>
+<DOCNO> 27 </DOCNO>
+
+
+ Memory management aspects of operating systems
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 28 </DOCNO>
+
+
+ Any information on packet radio networks.  Of particular interest are
+algorithms for packet routing, and for dealing with changes in
+network topography.  I am not interested in the hardware used in the
+network.
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 29 </DOCNO>
+
+
+ Number-theoretic algorithms, especially involving prime number series,
+sieves, and Chinese Remainder theorem.
+
+ 
+</DOC>
+
+
+<DOC>
+<DOCNO> 30 </DOCNO>
+
+
+ Articles on text formatting systems, including "what you see is what you
+get" systems.  Examples: t/nroff, scribe, bravo.
+
+ 
+</DOC>
