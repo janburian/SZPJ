@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import re
 
 def load_documents(path_to_directory: Path):
     res = []
@@ -57,9 +58,26 @@ def separate_query_text(DOC_end_tags_indices, DOC_start_tags_indices, queries):
     return dict_queries
 
 
-def reformat_documents(documents_list):
-    pass
+def reformat_documents(documents_raw):
+    res = []
+    for document in documents_raw:
+        document_list = document.split('\n')
+        document_list_pruned = []
+        for element in document_list:
+            element = ' '.join(element.split())  # deleting tabs (\t)
+            if element in ['<html>', '</html>', '<pre>', '</pre>', ''] or 'CACM' in element or element.isdigit():
+                continue
+            else:
+                document_list_pruned.append(element)
 
+        document_str_pruned = ' '.join(document_list_pruned)
+        res.append(document_str_pruned)
+
+    return res
+
+
+def delete_numbers():
+    pass
 
 if __name__ == '__main__':
     path_to_documents_directory = Path("./documents")
@@ -70,6 +88,7 @@ if __name__ == '__main__':
     queries_list = load_queries(queries_filename)
 
     # Reformatting
+    documents_final = reformat_documents(documents_list)
     queries_final = reformat_queries(queries_list)
 
     print()
