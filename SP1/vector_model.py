@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 def load_documents(path_to_directory: Path):
     res = {}
@@ -80,14 +81,38 @@ def reformat_documents(documents_raw):
     return res
 
 
-def vectorizer(data: list, queries: list):
+def vectorizer(data: dict, queries: dict, output_filename: str):
+    data_list = []
+    document_names = []
+    for document_name in data:  # TODO: hashovani slovniku?
+        data_list.append(data[document_name])
+        document_names.append(os.path.splitext(document_name)[0])
+
+    data_tuple = tuple(data_list)
+
     tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=False)  # specifikace objektu vectorizeru
-    sparse_doc_term_matrix = tfidf.fit_transform(data)  # samotná tvorba matice slov a dokumentů
+    sparse_doc_term_matrix = tfidf.fit_transform(data_tuple)  # samotná tvorba matice slov a dokumentů
     dense_doc_term_matrix = sparse_doc_term_matrix.toarray()  # matice v lepsim formatu
 
+    f = open(output_filename, 'w')
+    for topic_identifier in queries:
+        query_list = [queries[topic_identifier]]
+        q = tfidf.transform(query_list)
+        sim = cosine_similarity(sparse_doc_term_matrix, q)
+        write_to_output_file(f, topic_identifier, document_names, sim)
+    f.close()
 
+def write_to_output_file(f, topic_identifier: int, document_names: list, sim: np.ndarray):
+    sim_list = sim.tolist()
+    sim_flat_list = [item for sublist in sim_list for item in sublist]  # list of lists to list
+    similarities_descending_order = np.sort(sim_flat_list)[::-1]
+    relevant_document_indices = np.argsort(sim_flat_list)[::-1]
 
+    best_100_similarities = similarities_descending_order[0:100]
+    relevant_100_document_indices = relevant_document_indices[0:100]
 
+    for similarity, document_index in zip(best_100_similarities, relevant_100_document_indices):
+        f.write(str(topic_identifier) + '\t' + document_names[document_index] + '\t' + str(similarity) + '\n')
 
 
 if __name__ == '__main__':
@@ -102,5 +127,6 @@ if __name__ == '__main__':
     documents_final = reformat_documents(documents_list)
     queries_final = reformat_queries(queries_list)
 
-    # Vectorizer 
+    # Vectorizer
+    vectorizer(documents_final, queries_final, 'output.txt')
     print()

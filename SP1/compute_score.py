@@ -7,7 +7,7 @@ Created on Sun Apr 23 21:44:43 2017
 import math
 
 qrel = 'cacm_devel.rel'          #### file with relevance judgments
-scored = 'vzor_vystupu_vyhledavaciho_programu.txt'         #### file with retrieved documents
+scored = 'output.txt'         #### file with retrieved documents
 
 # qrel = 'toy.rel'
 #scored = 'toy.out'
