@@ -104,7 +104,7 @@ def vectorizer(data: dict, queries: dict, output_filename: str):
 
     # data_tuple = tuple(data_list)
 
-    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=False)  # specifikace objektu vectorizeru
+    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=False, sublinear_tf=True)  # specifikace objektu vectorizeru
     sparse_doc_term_matrix = tfidf.fit_transform(data_list)  # samotná tvorba matice slov a dokumentů
     # dense_doc_term_matrix = sparse_doc_term_matrix.toarray()  # matice v lepsim formatu
 
