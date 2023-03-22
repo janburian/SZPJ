@@ -3,6 +3,8 @@ from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import nltk
+from nltk.stem import PorterStemmer
 
 def load_documents(path_to_directory: Path):
     res = {}
@@ -60,7 +62,7 @@ def separate_query_text(DOC_end_tags_indices, DOC_start_tags_indices, queries):
     return dict_queries
 
 
-def reformat_documents(documents_raw):
+def reformat_documents(documents_raw, porter_stemmer: nltk.PorterStemmer):
     res = {}
     for document_name in documents_raw:
         document = documents_raw[document_name]
@@ -76,9 +78,9 @@ def reformat_documents(documents_raw):
                 str_no_CACM = element.replace('CACM', '')
                 document_list_pruned.append(str_no_CACM)
             else:
-                document_list_pruned.append(element)
+                document_list_pruned.append(porter_stemmer.stem(element))
 
-        document_str_pruned = ' '.join(document_list_pruned)
+        document_str_pruned = ' '.join(set(document_list_pruned))
         res[document_name] = document_str_pruned
 
     return res
@@ -133,12 +135,15 @@ if __name__ == '__main__':
     path_to_documents_directory = Path("./documents")
     queries_filename = "query_devel.xml"
 
+    nltk.download("punkt")
+    ps = PorterStemmer()
+
     # Loading documents
     documents_list = load_documents(path_to_documents_directory)
     queries_list = load_queries(queries_filename)
 
     # Reformatting
-    documents_final = reformat_documents(documents_list)
+    documents_final = reformat_documents(documents_list, ps)
     queries_final = reformat_queries(queries_list)
 
     # Vectorizer
