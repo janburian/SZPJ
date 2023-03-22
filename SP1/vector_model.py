@@ -101,12 +101,10 @@ def is_number(n: str):  # for detecting numbers such as floats, etc. from string
 def vectorizer(data: dict, queries: dict, output_filename: str):
     data_list = []
     document_names = []
-    for tuple_document_name_data in sorted(data.items()): # TODO: hashovani slovniku?
-        document_name = tuple_document_name_data[0]
-        document_data = tuple_document_name_data[1]
-
+    for document_name in data:  # TODO: hashovani slovniku?
+        data_list.append(data[document_name])
         document_names.append(os.path.splitext(document_name)[0])
-        data_list.append(document_data)
+
     # data_tuple = tuple(data_list)
 
     tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=False, sublinear_tf=True)  # specifikace objektu vectorizeru
@@ -115,18 +113,15 @@ def vectorizer(data: dict, queries: dict, output_filename: str):
     # index = tfidf.get_feature_names_out()
 
     f = open(output_filename, 'w')
-    for tuple_query_identifier_data in sorted(queries.items()):
-        topic_identifier = tuple_query_identifier_data[0]
-        query_data = tuple_query_identifier_data[1]
-
-        query_list = [query_data]
+    for topic_identifier in queries:
+        query_list = [queries[topic_identifier]]
         q = tfidf.transform(query_list)
         sim = cosine_similarity(sparse_doc_term_matrix, q)
         write_to_output_file(f, topic_identifier, document_names, sim)
     f.close()
 
 
-def write_to_output_file(f: , topic_identifier: int, document_names: list, sim: np.ndarray):
+def write_to_output_file(f, topic_identifier: int, document_names: list, sim: np.ndarray):
     sim_list = sim.tolist()
     sim_flat_list = [item for sublist in sim_list for item in sublist]  # list of lists to list
     similarities_descending_order = np.sort(sim_flat_list)[::-1]
