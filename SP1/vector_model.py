@@ -4,6 +4,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
+
 def load_documents(path_to_directory: Path):
     res = {}
     list_documents_names = os.listdir(path_to_directory)
@@ -16,6 +17,7 @@ def load_documents(path_to_directory: Path):
 
     return res
 
+
 def load_queries(filename: str):
     res = []
     with open(filename, 'r', encoding='utf-8') as file:
@@ -27,6 +29,7 @@ def load_queries(filename: str):
                 res.append(line_strip)
 
     return res
+
 
 def reformat_queries(queries: list):
     DOC_start_tags_indices = []
@@ -72,9 +75,9 @@ def reformat_documents(documents_raw):
                 continue
             if element in ['<html>', '</html>', '<pre>', '</pre>', '']:
                 continue
-            if 'CACM' in element:
-                str_no_CACM = element.replace('CACM', '')
-                document_list_pruned.append(str_no_CACM)
+            # if 'CACM' in element:
+            #     str_no_CACM = element.replace('CACM', '')
+            #     document_list_pruned.append(str_no_CACM)
             else:
                 document_list_pruned.append(element)
 
@@ -84,7 +87,7 @@ def reformat_documents(documents_raw):
     return res
 
 
-def is_number(n: str): # for detecting numbers such as floats, etc. from string
+def is_number(n: str):  # for detecting numbers such as floats, etc. from string
     try:
         float(n)   # Type-casting the string to `float`.
                    # If string is not a valid `float`,
@@ -107,6 +110,7 @@ def vectorizer(data: dict, queries: dict, output_filename: str):
     tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=False, sublinear_tf=True)  # specifikace objektu vectorizeru
     sparse_doc_term_matrix = tfidf.fit_transform(data_list)  # samotná tvorba matice slov a dokumentů
     # dense_doc_term_matrix = sparse_doc_term_matrix.toarray()  # matice v lepsim formatu
+    # index = tfidf.get_feature_names_out()
 
     f = open(output_filename, 'w')
     for topic_identifier in queries:
@@ -115,6 +119,7 @@ def vectorizer(data: dict, queries: dict, output_filename: str):
         sim = cosine_similarity(sparse_doc_term_matrix, q)
         write_to_output_file(f, topic_identifier, document_names, sim)
     f.close()
+
 
 def write_to_output_file(f, topic_identifier: int, document_names: list, sim: np.ndarray):
     sim_list = sim.tolist()
