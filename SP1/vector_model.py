@@ -68,10 +68,13 @@ def reformat_documents(documents_raw):
         document_list_pruned = []
         for element in document_list:
             element_splitted = ''.join(element.split())  # deleting tabs (\t)
-            if element_splitted.isdigit():
+            if is_number(element_splitted):
                 continue
-            if element in ['<html>', '</html>', '<pre>', '</pre>', ''] or 'CACM' in element:
+            if element in ['<html>', '</html>', '<pre>', '</pre>', '']:
                 continue
+            if 'CACM' in element:
+                str_no_CACM = element.replace('CACM', '')
+                document_list_pruned.append(str_no_CACM)
             else:
                 document_list_pruned.append(element)
 
@@ -81,6 +84,17 @@ def reformat_documents(documents_raw):
     return res
 
 
+def is_number(n: str): # for detecting numbers such as floats, etc. from string
+    try:
+        float(n)   # Type-casting the string to `float`.
+                   # If string is not a valid `float`,
+                   # it'll raise `ValueError` exception
+    except ValueError:
+        return False
+
+    return True
+
+
 def vectorizer(data: dict, queries: dict, output_filename: str):
     data_list = []
     document_names = []
@@ -88,11 +102,11 @@ def vectorizer(data: dict, queries: dict, output_filename: str):
         data_list.append(data[document_name])
         document_names.append(os.path.splitext(document_name)[0])
 
-    data_tuple = tuple(data_list)
+    # data_tuple = tuple(data_list)
 
     tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=False)  # specifikace objektu vectorizeru
-    sparse_doc_term_matrix = tfidf.fit_transform(data_tuple)  # samotná tvorba matice slov a dokumentů
-    dense_doc_term_matrix = sparse_doc_term_matrix.toarray()  # matice v lepsim formatu
+    sparse_doc_term_matrix = tfidf.fit_transform(data_list)  # samotná tvorba matice slov a dokumentů
+    # dense_doc_term_matrix = sparse_doc_term_matrix.toarray()  # matice v lepsim formatu
 
     f = open(output_filename, 'w')
     for topic_identifier in queries:
