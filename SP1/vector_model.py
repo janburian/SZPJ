@@ -100,6 +100,7 @@ def is_number(n: str):  # for detecting numbers such as floats, etc. from string
 
     return True
 
+
 def remove_stopwords(data: dict):
     res = {}
     stop_words = set(stopwords.words('english'))
@@ -159,13 +160,13 @@ if __name__ == '__main__':
     queries_list = load_queries(path_to_queries)
 
     # Reformatting
-    documents_reformarted = reformat_documents(documents_dict)
-    queries_reformated = reformat_queries(queries_list)
+    documents_reformatted = reformat_documents(documents_dict)
+    queries_reformatted = reformat_queries(queries_list)
 
     # Removing stop words
     nltk.download('stopwords')
-    documents_final = remove_stopwords(documents_reformarted)
-    queries_final = remove_stopwords(queries_reformated)
+    documents_final = remove_stopwords(documents_reformatted)
+    queries_final = remove_stopwords(queries_reformatted)
 
     # Vectorizer
     vectorizer(documents_final, queries_final, 'output.txt')
