@@ -3,6 +3,9 @@ from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 
 
 def load_documents(path_to_docs_directory: Path):
@@ -63,7 +66,7 @@ def separate_query_text(DOC_end_tags_indices, DOC_start_tags_indices, queries):
     return dict_queries
 
 
-def reformat_documents(documents_raw):
+def reformat_documents(documents_raw: dict):
     res = {}
     for document_name in documents_raw:
         document = documents_raw[document_name]
@@ -97,17 +100,30 @@ def is_number(n: str):  # for detecting numbers such as floats, etc. from string
 
     return True
 
+def remove_stopwords(data: dict):
+    res = {}
+    stop_words = set(stopwords.words('english'))
+    for document_name in data:
+        document = data[document_name]
+        word_tokens = word_tokenize(document)
+        # converts the words in word_tokens to lower case and then checks whether
+        # they are present in stop_words or not
+        filtered_document_list = [w for w in word_tokens if not w.lower() in stop_words]
+        res[document_name] = ' '.join(filtered_document_list)
+
+    return res
+
 
 def vectorizer(data: dict, queries: dict, output_filename: str):
     data_list = []
     document_names = []
-    for document_name in data:  # TODO: hashovani slovniku?
+    for document_name in data:
         data_list.append(data[document_name])
         document_names.append(os.path.splitext(document_name)[0])
 
     # data_tuple = tuple(data_list)
 
-    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=False, sublinear_tf=True)  # specifikace objektu vectorizeru
+    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=True, sublinear_tf=True)  # specifikace objektu vectorizeru
     sparse_doc_term_matrix = tfidf.fit_transform(data_list)  # samotná tvorba matice slov a dokumentů
     # dense_doc_term_matrix = sparse_doc_term_matrix.toarray()  # matice v lepsim formatu
     # index = tfidf.get_feature_names_out()
@@ -139,12 +155,17 @@ if __name__ == '__main__':
     path_to_queries = Path("query_devel.xml")
 
     # Loading documents
-    documents_list = load_documents(path_to_documents_directory)
+    documents_dict = load_documents(path_to_documents_directory)
     queries_list = load_queries(path_to_queries)
 
     # Reformatting
-    documents_final = reformat_documents(documents_list)
-    queries_final = reformat_queries(queries_list)
+    documents_reformarted = reformat_documents(documents_dict)
+    queries_reformated = reformat_queries(queries_list)
+
+    # Removing stop words
+    nltk.download('stopwords')
+    documents_final = remove_stopwords(documents_reformarted)
+    queries_final = remove_stopwords(queries_reformated)
 
     # Vectorizer
     vectorizer(documents_final, queries_final, 'output.txt')
