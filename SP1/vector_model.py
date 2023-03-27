@@ -122,9 +122,7 @@ def vectorizer(data: dict, queries: dict, output_filename: str):
         data_list.append(data[document_name])
         document_names.append(os.path.splitext(document_name)[0])
 
-    # data_tuple = tuple(data_list)
-
-    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=True, sublinear_tf=True)  # specifikace objektu vectorizeru
+    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=True, sublinear_tf=True, stop_words='english', )  # specifikace objektu vectorizeru
     sparse_doc_term_matrix = tfidf.fit_transform(data_list)  # samotná tvorba matice slov a dokumentů
     # dense_doc_term_matrix = sparse_doc_term_matrix.toarray()  # matice v lepsim formatu
     # index = tfidf.get_feature_names_out()
@@ -151,6 +149,22 @@ def write_to_output_file(f, topic_identifier: int, document_names: list, sim: np
         f.write(str(topic_identifier) + '\t' + document_names[document_index] + '\t' + str(similarity) + '\n')
 
 
+def save_stopwords_to_file(stopwords):
+    stopwords_list = stopwords.words('english')
+    idx = 1
+    f = open('stopwords.txt', 'w')
+
+    for stopword in stopwords_list:
+        if idx % 10 == 0:
+            f.write('\n')
+            f.write(stopword + " ")
+            idx += 1
+        else:
+            f.write(stopword + " ")
+            idx += 1
+    f.close()
+
+
 if __name__ == '__main__':
     path_to_documents_directory = Path("./documents")
     path_to_queries = Path("query_devel.xml")
@@ -160,13 +174,14 @@ if __name__ == '__main__':
     queries_list = load_queries(path_to_queries)
 
     # Reformatting
-    documents_reformatted = reformat_documents(documents_dict)
-    queries_reformatted = reformat_queries(queries_list)
+    documents_final = reformat_documents(documents_dict)
+    queries_final = reformat_queries(queries_list)
 
     # Removing stop words
-    nltk.download('stopwords')
-    documents_final = remove_stopwords(documents_reformatted)
-    queries_final = remove_stopwords(queries_reformatted)
+    # nltk.download('stopwords')
+    # # save_stopwords_to_file(stopwords)
+    # documents_final = remove_stopwords(documents_final)
+    # queries_final = remove_stopwords(queries_reformatted)
 
     # Vectorizer
     vectorizer(documents_final, queries_final, 'output.txt')
