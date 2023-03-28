@@ -101,18 +101,18 @@ def is_number(n: str):  # for detecting numbers such as floats, etc. from string
     return True
 
 
-def remove_stopwords(data: dict):
-    res = {}
-    stop_words = set(stopwords.words('english'))
-    for document_name in data:
-        document = data[document_name]
-        word_tokens = word_tokenize(document)
-        # converts the words in word_tokens to lower case and then checks whether
-        # they are present in stop_words or not
-        filtered_document_list = [w for w in word_tokens if not w.lower() in stop_words]
-        res[document_name] = ' '.join(filtered_document_list)
-
-    return res
+# def remove_stopwords(data: dict):
+#     res = {}
+#     stop_words = set(stopwords.words('english'))
+#     for document_name in data:
+#         document = data[document_name]
+#         word_tokens = word_tokenize(document)
+#         # converts the words in word_tokens to lower case and then checks whether
+#         # they are present in stop_words or not
+#         filtered_document_list = [w for w in word_tokens if not w.lower() in stop_words]
+#         res[document_name] = ' '.join(filtered_document_list)
+#
+#     return res
 
 
 def vectorizer(data: dict, queries: dict, output_filename: str):
@@ -122,7 +122,7 @@ def vectorizer(data: dict, queries: dict, output_filename: str):
         data_list.append(data[document_name])
         document_names.append(os.path.splitext(document_name)[0])
 
-    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=True, sublinear_tf=True, stop_words='english', )  # specifikace objektu vectorizeru
+    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=True, sublinear_tf=True, stop_words='english')  # specifikace objektu vectorizeru
     sparse_doc_term_matrix = tfidf.fit_transform(data_list)  # samotná tvorba matice slov a dokumentů
     # dense_doc_term_matrix = sparse_doc_term_matrix.toarray()  # matice v lepsim formatu
     # index = tfidf.get_feature_names_out()
