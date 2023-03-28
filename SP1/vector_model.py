@@ -7,6 +7,7 @@ import nltk
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
+
 def load_documents(path_to_docs_directory: Path):
     res = {}
     list_documents_names = os.listdir(path_to_docs_directory)
@@ -134,14 +135,14 @@ def write_to_output_file(f, topic_identifier: int, document_names: list, sim: np
         f.write(str(topic_identifier) + '\t' + document_names[document_index] + '\t' + str(similarity) + '\n')
 
 
-def apply_stemming(data: dict, ps):
+def apply_stemming(data: dict, porter_stemmer: nltk.PorterStemmer):
     for key in data:
         words_str = data[key]
         words_tokenized = word_tokenize(words_str)
         list_stemmed_words = []
 
         for word in words_tokenized:
-            word_stem = ps.stem(word)
+            word_stem = porter_stemmer.stem(word)
             list_stemmed_words.append(word_stem)
 
         data[key] = ' '.join(list_stemmed_words)
@@ -170,4 +171,3 @@ if __name__ == '__main__':
 
     # Vectorizer
     vectorizer(documents_stemming, queries_stemming, 'output.txt')
-    print()
