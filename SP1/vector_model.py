@@ -1,3 +1,4 @@
+# Imports
 import os
 from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -8,6 +9,7 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
 
+# Methods
 def load_documents(path_to_docs_directory: Path):
     res = {}
     list_documents_names = os.listdir(path_to_docs_directory)
@@ -47,19 +49,19 @@ def reformat_queries(queries: list):
 
         idx += 1
 
-    separated_query_texts = separate_query_text(DOC_end_tags_indices, DOC_start_tags_indices, queries)
+    separated_query_texts = separate_query_texts(DOC_end_tags_indices, DOC_start_tags_indices, queries)
 
     return separated_query_texts
 
 
-def separate_query_text(DOC_end_tags_indices, DOC_start_tags_indices, queries):
+def separate_query_texts(DOC_end_tags_indices, DOC_start_tags_indices, queries):
     dict_queries = {}
     for i in range(len(DOC_start_tags_indices)):
         topic = queries[DOC_start_tags_indices[i] + 1]  # element on next index after <DOC> is <DOCNO>number<\DOCNO>
         topic_identifier = int(''.join(filter(str.isdigit, topic)))
         extracted_text_start = (DOC_start_tags_indices[i] + 2)
         extracted_text_end = DOC_end_tags_indices[i]
-        extracted_text_list = queries[extracted_text_start: extracted_text_end]  # text separation
+        extracted_text_list = queries[extracted_text_start:extracted_text_end]  # text separation
         extracted_text_str = ' '.join(extracted_text_list)
         dict_queries[topic_identifier] = extracted_text_str
 
@@ -108,7 +110,8 @@ def vectorizer(data: dict, queries: dict, output_filename: str):
         data_list.append(data[document_name])
         document_names.append(os.path.splitext(document_name)[0])
 
-    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=True, sublinear_tf=True, stop_words='english')  # specifikace objektu vectorizeru
+    # specifikace objektu vectorizeru
+    tfidf = TfidfVectorizer(norm=None, use_idf=True, smooth_idf=True, sublinear_tf=True, stop_words='english')
     sparse_doc_term_matrix = tfidf.fit_transform(data_list)  # samotná tvorba matice slov a dokumentů
     # dense_doc_term_matrix = sparse_doc_term_matrix.toarray()  # matice v lepsim formatu
     # index = tfidf.get_feature_names_out()
@@ -149,6 +152,18 @@ def apply_stemming(data: dict, porter_stemmer: nltk.PorterStemmer):
 
     return data
 
+
+# def delete_punctuation(data: dict):
+#     punc_str = '!()-[]{};:/@#$%^\,.&*_~""'
+#     for key in data:
+#         words_str = data[key]
+#         for char in words_str:
+#             if char in punc_str:
+#                 words_str = words_str.replace(char, '')
+#
+#         data[key] = words_str
+#
+#     return data
 
 if __name__ == '__main__':
     path_to_documents_directory = Path("./documents")
