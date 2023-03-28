@@ -4,9 +4,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import nltk
-from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
-
 
 def load_documents(path_to_docs_directory: Path):
     res = {}
@@ -101,20 +100,6 @@ def is_number(n: str):  # for detecting numbers such as floats, etc. from string
     return True
 
 
-# def remove_stopwords(data: dict):
-#     res = {}
-#     stop_words = set(stopwords.words('english'))
-#     for document_name in data:
-#         document = data[document_name]
-#         word_tokens = word_tokenize(document)
-#         # converts the words in word_tokens to lower case and then checks whether
-#         # they are present in stop_words or not
-#         filtered_document_list = [w for w in word_tokens if not w.lower() in stop_words]
-#         res[document_name] = ' '.join(filtered_document_list)
-#
-#     return res
-
-
 def vectorizer(data: dict, queries: dict, output_filename: str):
     data_list = []
     document_names = []
@@ -149,20 +134,19 @@ def write_to_output_file(f, topic_identifier: int, document_names: list, sim: np
         f.write(str(topic_identifier) + '\t' + document_names[document_index] + '\t' + str(similarity) + '\n')
 
 
-def save_stopwords_to_file(stopwords):
-    stopwords_list = stopwords.words('english')
-    idx = 1
-    f = open('stopwords.txt', 'w')
+def apply_stemming(data: dict, ps):
+    for key in data:
+        words_str = data[key]
+        words_tokenized = word_tokenize(words_str)
+        list_stemmed_words = []
 
-    for stopword in stopwords_list:
-        if idx % 10 == 0:
-            f.write('\n')
-            f.write(stopword + " ")
-            idx += 1
-        else:
-            f.write(stopword + " ")
-            idx += 1
-    f.close()
+        for word in words_tokenized:
+            word_stem = ps.stem(word)
+            list_stemmed_words.append(word_stem)
+
+        data[key] = ' '.join(list_stemmed_words)
+
+    return data
 
 
 if __name__ == '__main__':
@@ -174,15 +158,16 @@ if __name__ == '__main__':
     queries_list = load_queries(path_to_queries)
 
     # Reformatting
-    documents_final = reformat_documents(documents_dict)
-    queries_final = reformat_queries(queries_list)
+    documents_reformatted = reformat_documents(documents_dict)
+    queries_reformatted = reformat_queries(queries_list)
 
-    # Removing stop words
-    # nltk.download('stopwords')
-    # # save_stopwords_to_file(stopwords)
-    # documents_final = remove_stopwords(documents_final)
-    # queries_final = remove_stopwords(queries_reformatted)
+    # Apply stemming
+    nltk.download('punkt')
+    ps = PorterStemmer()
+
+    documents_stemming = apply_stemming(documents_reformatted, ps)
+    queries_stemming = apply_stemming(queries_reformatted, ps)
 
     # Vectorizer
-    vectorizer(documents_final, queries_final, 'output.txt')
+    vectorizer(documents_stemming, queries_stemming, 'output.txt')
     print()
