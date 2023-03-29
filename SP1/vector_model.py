@@ -5,9 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import nltk
-from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
-
 
 # Methods
 def load_documents(path_to_docs_directory: Path):
@@ -15,7 +13,7 @@ def load_documents(path_to_docs_directory: Path):
     list_documents_names = os.listdir(path_to_docs_directory)
 
     for document_name in list_documents_names:
-        document_path = os.path.join(path_to_documents_directory, document_name)
+        document_path = os.path.join(path_to_docs_directory, document_name)
         document = open(document_path, "r")
         res[document_name] = document.read()
         document.close()
@@ -103,7 +101,7 @@ def is_number(n: str):  # for detecting numbers such as floats, etc. from string
     return True
 
 
-def vectorizer(data: dict, queries: dict, output_filename: str):
+def vectorizer(data: dict, queries: dict, output_filename: Path):
     data_list = []
     document_names = []
     for document_name in data:
@@ -151,38 +149,3 @@ def apply_stemming(data: dict, porter_stemmer: nltk.PorterStemmer):
         data[key] = ' '.join(list_stemmed_words)
 
     return data
-
-
-# def delete_punctuation(data: dict):
-#     punc_str = '!()-[]{};:/@#$%^\,.&*_~""'
-#     for key in data:
-#         words_str = data[key]
-#         for char in words_str:
-#             if char in punc_str:
-#                 words_str = words_str.replace(char, '')
-#
-#         data[key] = words_str
-#
-#     return data
-
-if __name__ == '__main__':
-    path_to_documents_directory = Path("./documents")
-    path_to_queries = Path("query_devel.xml")
-
-    # Loading documents
-    documents_dict = load_documents(path_to_documents_directory)
-    queries_list = load_queries(path_to_queries)
-
-    # Reformatting
-    documents_reformatted = reformat_documents(documents_dict)
-    queries_reformatted = reformat_queries(queries_list)
-
-    # Apply stemming
-    nltk.download('punkt')
-    ps = PorterStemmer()
-
-    documents_stemming = apply_stemming(documents_reformatted, ps)
-    queries_stemming = apply_stemming(queries_reformatted, ps)
-
-    # Vectorizer
-    vectorizer(documents_stemming, queries_stemming, 'output.txt')
