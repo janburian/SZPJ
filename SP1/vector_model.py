@@ -9,12 +9,13 @@ from nltk.tokenize import word_tokenize
 
 # Methods
 def load_documents(path_to_docs_directory: Path):
+    print('Loading documents...')
     res = {}
     list_documents_names = os.listdir(path_to_docs_directory)
 
     for document_name in list_documents_names:
         document_path = os.path.join(path_to_docs_directory, document_name)
-        document = open(document_path, "r")
+        document = open(document_path, 'r')
         res[document_name] = document.read()
         document.close()
 
@@ -22,6 +23,7 @@ def load_documents(path_to_docs_directory: Path):
 
 
 def load_queries(path_to_queries: Path):
+    print('Loading queries...')
     res = []
     with open(path_to_queries, 'r', encoding='utf-8') as file:
         for line in file:

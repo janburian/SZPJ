@@ -1,12 +1,14 @@
 import argparse
 from nltk.stem import PorterStemmer
+from datetime import datetime
+
 from vector_model import *
 
 if __name__ == '__main__':
     # CMD
     parser = argparse.ArgumentParser(
         prog='Natural language processing',
-        description='Creates file with the 100 most relevant documents according to the query.',
+        description='Creates file with the 100 most relevant documents according to the queries.',
     )
 
     parser.add_argument('-p', '--path_input_directory', metavar='path_input_directory', type=str,
@@ -26,7 +28,7 @@ if __name__ == '__main__':
     path_output_file = args.path_output_file
 
     if path_output_file is None:
-        output_filename = path_to_documents_directory.name.replace("ortho", "phntrn")
+        output_filename = 'output_SZPJ_' + datetime.now().strftime("%Y%m%d_%H%M") + '.txt'
         path_output_file = os.path.join(path_to_documents_directory.parent, output_filename)
 
 
