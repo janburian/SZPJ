@@ -7,6 +7,7 @@ import numpy as np
 import nltk
 from nltk.tokenize import word_tokenize
 
+
 # Methods
 def load_documents(path_to_docs_directory: Path):
     print('Loading documents...')
@@ -94,9 +95,7 @@ def reformat_documents(documents_raw: dict):
 
 def is_number(n: str):  # for detecting numbers such as floats, etc. from string
     try:
-        float(n)   # Type-casting the string to `float`.
-                   # If string is not a valid `float`,
-                   # it'll raise `ValueError` exception
+        float(n)   # Type-casting the string to `float`, if string is not a valid `float`, it'll raise `ValueError` exception
     except ValueError:
         return False
 
@@ -123,6 +122,8 @@ def vectorizer(data: dict, queries: dict, output_filename: Path):
         sim = cosine_similarity(sparse_doc_term_matrix, q)
         write_to_output_file(f, topic_identifier, document_names, sim)
     f.close()
+
+    print('Done.')
 
 
 def write_to_output_file(f, topic_identifier: int, document_names: list, sim: np.ndarray):
