@@ -55,7 +55,7 @@ def reformat_queries(queries: list):
     return separated_query_texts
 
 
-def separate_query_texts(DOC_end_tags_indices, DOC_start_tags_indices, queries):
+def separate_query_texts(DOC_end_tags_indices: list, DOC_start_tags_indices: list, queries: list):
     dict_queries = {}
     for i in range(len(DOC_start_tags_indices)):
         topic = queries[DOC_start_tags_indices[i] + 1]  # element on next index after <DOC> is <DOCNO>number<\DOCNO>
